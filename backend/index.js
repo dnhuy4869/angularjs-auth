@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const { initDatabase } = require('./app/database');
+const { initRoutes } = require('./app/routes');
 
 dotenv.config();
 
@@ -29,6 +31,9 @@ app.use((err, req, res, next) => {
 
     next();
 });
+
+initDatabase();
+initRoutes(app);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
