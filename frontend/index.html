@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AngularJS App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <div ng-controller="MainController">
+        <h1>{{ title }}</h1>
+        <p>{{ description }}</p>
+
+        <h3>Enter Your Name:</h3>
+        <input type="text" ng-model="userName" placeholder="Your name here">
+        <p>Hello, {{ userName }}!</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
