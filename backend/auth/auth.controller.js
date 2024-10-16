@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const authMethods = require("./auth.methods.js");
 
 const ACCESS_TOKEN_LIFE = "10s";
-const REFRESH_TOKEN_LIFE = "1d";
+const REFRESH_TOKEN_LIFE = "15s";
 
 const login = async (req, res) => {
     try {
