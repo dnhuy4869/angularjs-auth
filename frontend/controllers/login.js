@@ -1,13 +1,13 @@
 var app = angular.module('myApp', []);
 
-app.controller('MainController', function ($scope, $http, $window) {
+app.controller('LoginController', ($scope, $http, $window) => {
     $scope.title = "Welcome to My AngularJS Website!";
     $scope.description = "This is a simple single-page application using AngularJS.";
 
     $scope.user = {};
     $scope.isLoginFailed = false;
 
-    $scope.login = function () {
+    $scope.login = () => {
 
         console.log($scope.user.username);
         console.log($scope.user.password);
@@ -17,14 +17,17 @@ app.controller('MainController', function ($scope, $http, $window) {
             password: $scope.user.password
         };
 
-        $http.post('http://127.0.0.1:8000/auth/login', loginData)
-            .then(function (response) {
+        $http.post('http://127.0.0.1:8000/auth/login', loginData, {
+            withCredentials: true
+        })
+            .then((response) => {
                 console.log(response.data);
 
+                localStorage.setItem('loginData', JSON.stringify(response.data));
                 $scope.isLoginFailed = false;
                 $window.location.href = 'dashboard.html';
 
-            }, function (error) {
+            }, (error) => {
                 console.log(error);
                 $scope.isLoginFailed = true;
             });

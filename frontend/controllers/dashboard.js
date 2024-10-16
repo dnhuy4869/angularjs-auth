@@ -1,36 +1,38 @@
-var app = angular.module('dashboardApp', []);
+var app = angular.module('myApp', []);
 
-app.controller('DashboardController', function ($scope, $http, $window) {
+app.controller('DashboardController', ($scope, $http, $window) => {
     $scope.users = [];
 
-    $scope.fetchUsers = function () {
+    $scope.fetchUsers = () => {
         $http.get('http://127.0.0.1:8000/user/get-all')
-            .then(function (response) {
+            .then((response) => {
                 $scope.users = response.data;
             }, function (error) {
                 console.error('Error fetching users:', error);
             });
     };
 
-    $scope.logout = function () {
+    $scope.logout = () => {
         console.log("logout");
+
+        $window.localStorage.removeItem('loginData');
         $window.location.href = 'login.html';
     };
 
-    $scope.editUser = function (user) {
+    $scope.editUser = (user) => {
         alert('Edit user: ' + user.username);
     };
 
-    $scope.deleteUser = function (user) {
+    $scope.deleteUser = (user) => {
         $http.delete('http://127.0.0.1:8000/user/delete-one/' + user._id)
-            .then(function (response) {
+            .then((response) => {
                 console.log('User deleted:', response.data);
                 // Remove user from the local users array
                 var index = $scope.users.indexOf(user);
                 if (index > -1) {
                     $scope.users.splice(index, 1);
                 }
-            }, function (error) {
+            }, (error) => {
                 console.error('Error deleting user:', error);
             });
     };
