@@ -1,4 +1,4 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp');
 
 app.controller('DashboardController', ($scope, $http, $window) => {
     $scope.users = [];
@@ -39,4 +39,16 @@ app.controller('DashboardController', ($scope, $http, $window) => {
 
     // Init users
     $scope.fetchUsers();
+
+    // setup event to logout if refresh token expired
+    const refreshTokenFailedHandler = () => {
+        console.log("Refresh token failed, logging out.");
+        $scope.logout();
+    };
+
+    window.addEventListener('refreshTokenFailed', refreshTokenFailedHandler);
+
+    $scope.$on('$destroy', () => {
+        window.removeEventListener('refreshTokenFailed', refreshTokenFailedHandler);
+    });
 });

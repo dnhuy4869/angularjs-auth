@@ -67,3 +67,7 @@ app.factory('AuthInterceptor', ($q, $window, $injector) => {
 app.config(($httpProvider) => {
     $httpProvider.interceptors.push('AuthInterceptor');
 });
+
+app.run(function ($http) {
+    console.log("App has been loaded");
+});

@@ -1,4 +1,4 @@
-var app = angular.module('myApp', []);
+var app = angular.module('loginApp', []);
 
 app.controller('LoginController', ($scope, $http, $window) => {
     $scope.title = "Welcome to My AngularJS Website!";
