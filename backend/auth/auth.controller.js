@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const UserModel = require("../user/user.model.js");
 const bcrypt = require('bcrypt');
 const authMethods = require("./auth.methods.js");
@@ -29,6 +30,61 @@ const login = async (req, res) => {
                 message: "Incorrect password",
             })
         }
+
+        // Generate a 6-digit verification code
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        user.verificationCode = verificationCode;
+        await user.save();
+
+        // Send the verification code via email
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: 'Your Verification Code',
+            text: `Your verification code is ${verificationCode}.`,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        return res.status(200).json({
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        });
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Internal server error",
+            error: err,
+        })
+    }
+};
+
+const verifyEmail = async (req, res) => {
+    try {
+        const { username, code } = req.body;
+
+        const user = await UserModel.findOne({ username: username });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.verificationCode !== code) {
+            return res.status(401).json({ message: "Invalid verification code" });
+        }
+
+        user.verificationCode = null;
+        await user.save();
 
         // generate token
         const tokenData = {
@@ -69,7 +125,7 @@ const login = async (req, res) => {
             error: err,
         })
     }
-};
+}
 
 const register = async (req, res) => {
     try {
@@ -192,4 +248,5 @@ module.exports = {
     register,
     refresh,
     logout,
+    verifyEmail,
 };

@@ -1,9 +1,6 @@
 var app = angular.module('loginApp', []);
 
 app.controller('LoginController', ($scope, $http, $window) => {
-    $scope.title = "Welcome to My AngularJS Website!";
-    $scope.description = "This is a simple single-page application using AngularJS.";
-
     $scope.user = {};
     $scope.isLoginFailed = false;
 
@@ -25,7 +22,7 @@ app.controller('LoginController', ($scope, $http, $window) => {
 
                 localStorage.setItem('loginData', JSON.stringify(response.data));
                 $scope.isLoginFailed = false;
-                $window.location.href = 'dashboard.html';
+                $window.location.href = 'verify.html';
 
             }, (error) => {
                 console.log(error);
